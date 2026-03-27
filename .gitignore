@@ -1,17 +1,26 @@
-# Ігноруємо конфігурацію з чутливими даними
-appsettings.json
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
 
-# Але можемо додати шаблон
-appsettings.example.json
+# Build results
+[Dd]ebug/
+[Rr]elease/
+x64/
+x86/
+[Bb]in/
+[Oo]bj/
+*.dll
+*.exe
 
-# Тестові артефакти
+# Test results
 test-results/
 *.trx
 *.coverage
-.vs/
 
-# Скріншоти з тестів
-*.png
-
-# Локальні налаштування
-appsettings.local.json
+# Sensitive data
+appsettings.json
+*.pfx
+*.pem
