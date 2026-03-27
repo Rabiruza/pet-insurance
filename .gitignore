@@ -8,6 +8,7 @@ appsettings.example.json
 test-results/
 *.trx
 *.coverage
+.vs/
 
 # Скріншоти з тестів
 *.png
