@@ -1,0 +1,16 @@
+# Ігноруємо конфігурацію з чутливими даними
+appsettings.json
+
+# Але можемо додати шаблон
+appsettings.example.json
+
+# Тестові артефакти
+test-results/
+*.trx
+*.coverage
+
+# Скріншоти з тестів
+*.png
+
+# Локальні налаштування
+appsettings.local.json
