@@ -1,0 +1,71 @@
+# CI/CD пайплайн для Azure DevOps
+
+trigger:
+  - main          # Запускати при пуші в гілку main
+  - develop       # та при пуші в develop
+
+pool:
+  vmImage: 'windows-latest'  # Використовуємо Windows-агент
+
+variables:
+  buildConfiguration: 'Release'
+  projectPath: 'PetInsurance.Tests/PetInsurance.Tests.csproj'
+
+steps:
+# 🔹 1. Встановлюємо .NET
+- task: UseDotNet@2
+  displayName: 'Install .NET SDK'
+  inputs:
+    packageType: 'sdk'
+    version: '10.x'  # Або '8.x', залежно від твоєї версії
+    includePreviewVersions: true
+
+# 🔹 2. Відновлюємо залежності (NuGet пакети)
+- task: DotNetCoreCLI@2
+  displayName: 'Restore dependencies'
+  inputs:
+    command: 'restore'
+    projects: '$(projectPath)'
+
+# 🔹 3. Збираємо проєкт
+- task: DotNetCoreCLI@2
+  displayName: 'Build project'
+  inputs:
+    command: 'build'
+    projects: '$(projectPath)'
+    arguments: '--configuration $(buildConfiguration)'
+
+# 🔹 4. Встановлюємо браузери для Playwright
+- script: |
+    pwsh bin/Debug/net10.0/playwright.ps1 install --with-deps
+  displayName: 'Install Playwright browsers'
+  workingDirectory: 'PetInsurance.Tests'
+
+# 🔹 5. Запускаємо тести
+- task: DotNetCoreCLI@2
+  displayName: 'Run tests'
+  inputs:
+    command: 'test'
+    projects: '$(projectPath)'
+    arguments: >
+      --configuration $(buildConfiguration)
+      --collect:"XPlat Code Coverage"
+      --logger "trx;LogFileName=test-results.trx"
+      --logger "console;verbosity=detailed"
+
+# 🔹 6. Публікуємо результати тестів
+- task: PublishTestResults@2
+  displayName: 'Publish test results'
+  inputs:
+    testResultsFormat: 'VSTest'
+    testResultsFiles: '**/*.trx'
+    testRunTitle: 'PetInsurance Tests'
+  condition: succeededOrFailed()  # Публікуємо навіть якщо тести впали
+
+# 🔹 7. Публікуємо артефакти (скріншоти, логи)
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish test artifacts'
+  inputs:
+    PathtoPublish: 'PetInsurance.Tests/test-results'
+    ArtifactName: 'test-results'
+  condition: succeededOrFailed()
