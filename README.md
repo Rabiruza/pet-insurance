@@ -1,15 +1,13 @@
-# 🐾 Pet Insurance Test Automation Framework
-
-## Експрес-підготовка до технічної співбесіди (3 дні)
+# Pet Insurance Test Automation Framework
 
 Цей проєкт демонструє ключові технології з вакансії GlobalLogic:
-- ✅ C# + Playwright для UI automation
-- ✅ RestSharp для API testing
-- ✅ Database testing (SQL/NoSQL patterns)
-- ✅ Azure cloud concepts (Functions, Service Bus)
-- ✅ CI/CD pipeline integration
+- C# + Playwright для UI automation
+- RestSharp для API testing
+- Database testing (SQL/NoSQL patterns)
+- Azure cloud concepts (Functions, Service Bus)
+- CI/CD pipeline integration
 
-## 📁 Структура проєкту
+## Структура проєкту
 
 ```
 PetInsuranceTestFramework/
@@ -28,7 +26,7 @@ PetInsuranceTestFramework/
 └── README.md
 ```
 
-## 🚀 Швидкий старт
+## Швидкий старт
 
 ### 1. Встановлення залежностей
 ```bash
@@ -51,7 +49,7 @@ dotnet test --filter Category=API
 dotnet test --logger "console;verbosity=detailed"
 ```
 
-## 📚 Що покриває проєкт
+##  Що покриває проєкт
 
 ### День 1: UI + API Testing
 - Page Object Model pattern
@@ -70,7 +68,7 @@ dotnet test --logger "console;verbosity=detailed"
 - Kubernetes/AKS concepts
 - Типові питання співбесіди
 
-## 🎯 Тестові endpoints
+##  Тестові endpoints
 
 **UI Testing:**
 - https://petstore.swagger.io (Pet Store demo)
@@ -80,24 +78,10 @@ dotnet test --logger "console;verbosity=detailed"
 - https://petstore.swagger.io/v2 (Pet Store API)
 - https://restful-booker.herokuapp.com (Booking API)
 
-## 💡 Ключові паттерни
+##  Ключові паттерни
 
 1. **Page Object Model** - чітка структура UI тестів
 2. **Builder Pattern** - для створення тестових даних
 3. **Factory Pattern** - для ініціалізації клієнтів
 4. **Repository Pattern** - для database операцій
 5. **Singleton** - для конфігурації
-
-## 📝 Підготовка до співбесіди
-
-Файл `InterviewPrep.md` містить:
-- Типові технічні питання
-- Приклади відповідей
-- Code snippets для демонстрації
-- Azure cloud концепції
-- Best practices
-
----
-
-**Автор:** Росіна Полока  
-**Мета:** Підготовка до Senior AQA позиції в GlobalLogic
