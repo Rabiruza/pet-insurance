@@ -1,0 +1,296 @@
+{
+  "info": {
+    "name": "RESTful Booker - Learning Collection",
+    "description": "Postman collection for learning REST API testing with RESTful Booker API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "01. Health Check",
+      "item": [
+        {
+          "name": "Ping API",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://restful-booker.herokuapp.com/ping",
+              "protocol": "https",
+              "host": ["restful-booker", "herokuapp", "com"],
+              "path": ["ping"]
+            },
+            "description": "Simple health check endpoint. Returns 'Created' if API is working."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "02. Authentication",
+      "item": [
+        {
+          "name": "Create Token - Valid Credentials",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"admin\",\n    \"password\": \"password123\"\n}"
+            },
+            "url": {
+              "raw": "https://restful-booker.herokuapp.com/auth",
+              "protocol": "https",
+              "host": ["restful-booker", "herokuapp", "com"],
+              "path": ["auth"]
+            },
+            "description": "Create authentication token with valid credentials. Save the token for subsequent requests."
+          },
+          "response": []
+        },
+        {
+          "name": "Create Token - Invalid Credentials",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"username\": \"wronguser\",\n    \"password\": \"wrongpass\"\n}"
+            },
+            "url": {
+              "raw": "https://restful-booker.herokuapp.com/auth",
+              "protocol": "https",
+              "host": ["restful-booker", "herokuapp", "com"],
+              "path": ["auth"]
+            },
+            "description": "Try to authenticate with invalid credentials. Should return 403 Forbidden."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "03. GET Bookings",
+      "item": [
+        {
+          "name": "Get All Bookings",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://restful-booker.herokuapp.com/booking",
+              "protocol": "https",
+              "host": ["restful-booker", "herokuapp", "com"],
+              "path": ["booking"]
+            },
+            "description": "Get summary of all bookings. Returns array with booking IDs and first names."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Booking by ID",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://restful-booker.herokuapp.com/booking/1",
+              "protocol": "https",
+              "host": ["restful-booker", "herokuapp", "com"],
+              "path": ["booking", "1"]
+            },
+            "description": "Get full details of a specific booking by ID."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Non-existent Booking",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://restful-booker.herokuapp.com/booking/99999",
+              "protocol": "https",
+              "host": ["restful-booker", "herokuapp", "com"],
+              "path": ["booking", "99999"]
+            },
+            "description": "Try to get a booking that doesn't exist. Should return 404 Not Found."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "04. POST Create Booking",
+      "item": [
+        {
+          "name": "Create New Booking",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstname\": \"John\",\n    \"lastname\": \"Doe\",\n    \"totalprice\": 100,\n    \"depositpaid\": true,\n    \"bookingdates\": {\n        \"checkin\": \"2024-01-01\",\n        \"checkout\": \"2024-01-10\"\n    },\n    \"additionalneeds\": \"Breakfast\"\n}"
+            },
+            "url": {
+              "raw": "https://restful-booker.herokuapp.com/booking",
+              "protocol": "https",
+              "host": ["restful-booker", "herokuapp", "com"],
+              "path": ["booking"]
+            },
+            "description": "Create a new booking. Returns booking ID and full booking details. Save the booking ID for later tests."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "05. PUT Update Booking",
+      "item": [
+        {
+          "name": "Update Booking - Full Replace",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "token={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstname\": \"Jane\",\n    \"lastname\": \"Smith\",\n    \"totalprice\": 150,\n    \"depositpaid\": true,\n    \"bookingdates\": {\n        \"checkin\": \"2024-02-01\",\n        \"checkout\": \"2024-02-15\"\n    },\n    \"additionalneeds\": \"Lunch\"\n}"
+            },
+            "url": {
+              "raw": "https://restful-booker.herokuapp.com/booking/{{bookingId}}",
+              "protocol": "https",
+              "host": ["restful-booker", "herokuapp", "com"],
+              "path": ["booking", "{{bookingId}}"]
+            },
+            "description": "Fully update an existing booking. Requires authentication token. ALL fields must be provided."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Booking - Without Auth",
+          "request": {
+            "method": "PUT",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstname\": \"Hacker\",\n    \"lastname\": \"Attempt\"\n}"
+            },
+            "url": {
+              "raw": "https://restful-booker.herokuapp.com/booking/{{bookingId}}",
+              "protocol": "https",
+              "host": ["restful-booker", "herokuapp", "com"],
+              "path": ["booking", "{{bookingId}}"]
+            },
+            "description": "Try to update without authentication. Should return 403 Forbidden."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "06. PATCH Partial Update",
+      "item": [
+        {
+          "name": "Partial Update - First Name Only",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Cookie",
+                "value": "token={{token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n    \"firstname\": \"Updated\"\n}"
+            },
+            "url": {
+              "raw": "https://restful-booker.herokuapp.com/booking/{{bookingId}}",
+              "protocol": "https",
+              "host": ["restful-booker", "herokuapp", "com"],
+              "path": ["booking", "{{bookingId}}"]
+            },
+            "description": "Partially update only the firstname field. Other fields remain unchanged."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "07. DELETE Booking",
+      "item": [
+        {
+          "name": "Delete Booking",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Cookie",
+                "value": "token={{token}}"
+              }
+            ],
+            "url": {
+              "raw": "https://restful-booker.herokuapp.com/booking/{{bookingId}}",
+              "protocol": "https",
+              "host": ["restful-booker", "herokuapp", "com"],
+              "path": ["booking", "{{bookingId}}"]
+            },
+            "description": "Delete a booking. Returns 204 No Content on success."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "bookingId",
+      "value": "0",
+      "type": "number"
+    },
+    {
+      "key": "token",
+      "value": "",
+      "type": "string"
+    }
+  ]
+}

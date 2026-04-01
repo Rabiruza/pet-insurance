@@ -7,6 +7,62 @@
 - Azure cloud concepts (Functions, Service Bus)
 - CI/CD pipeline integration
 
+---
+
+## 🎓 REST API Testing Course for QA Engineers
+
+This project includes a **complete REST API testing course** using RESTful Booker API.
+
+### 📖 Course Materials:
+
+| Document | Description |
+|----------|-------------|
+| [`LEARNING_GUIDE.md`](./LEARNING_GUIDE.md) | Theory: HTTP, REST, JSON, testing concepts |
+| [`HOMEWORK.md`](./HOMEWORK.md) | Practical assignments for each lesson |
+
+### 🗂️ Course Structure:
+
+```
+PetInsurance.Tests/
+├── ApiClients/RestfulBooker/
+│   ├── IRestfulBookerClient.cs    # Interface definition
+│   └── RestfulBookerClient.cs     # Implementation
+├── Models/RestfulBooker/
+│   └── Booking.cs                 # Data models
+├── Tests/API/RestfulBooker/
+│   ├── Lesson1_GetBookingTests.cs     # GET requests
+│   ├── Lesson2_CreateBookingTests.cs  # POST requests
+│   ├── Lesson3_UpdateBookingTests.cs  # PUT/PATCH + Auth
+│   └── Lesson4_DeleteBookingTests.cs  # DELETE + CRUD
+└── Postman/
+    └── RESTful_Booker_Learning.postman_collection.json
+```
+
+### 🚀 Quick Start - Run All API Tests:
+
+```bash
+# Run all API tests
+dotnet test --filter Category=API
+
+# Run specific lesson
+dotnet test --filter "Category=API&Category=Lesson1"
+dotnet test --filter "Category=API&Category=Lesson2"
+dotnet test --filter "Category=API&Category=Lesson3"
+dotnet test --filter "Category=API&Category=Lesson4"
+
+# Run with detailed output
+dotnet test --logger "console;verbosity=detailed" --filter Category=API
+```
+
+### 📬 Postman Setup:
+
+1. Open Postman
+2. Click **Import**
+3. Select `PetInsurance.Tests/Postman/RESTful_Booker_Learning.postman_collection.json`
+4. Start exploring the API manually!
+
+---
+
 ## Структура проєкту
 
 ```
