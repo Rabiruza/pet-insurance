@@ -34,27 +34,27 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
             _token = tokenResponse?.token ?? throw new InvalidOperationException("Failed to get token");
 
             // Create a booking to update
-            var newBooking = new Booking
+            var newBooking = new BookingRestful
             {
-                firstname = "Original",
-                lastname = "User",
-                totalprice = 100,
-                depositpaid = true,
-                bookingdates = new BookingDates
+                Firstname = "Original",
+                Lastname = "User",
+                Totalprice = 100,
+                Depositpaid = true,
+                Bookingdates = new BookingDates
                 {
-                    checkin = "2024-01-01",
-                    checkout = "2024-01-10"
+                    Checkin = "2024-01-01",
+                    Checkout = "2024-01-10"
                 }
             };
             var createResponse = await _apiClient.CreateBookingAsync(newBooking);
-            _bookingId = createResponse?.bookingid ?? throw new InvalidOperationException("Failed to create booking");
+            _bookingId = createResponse?.Bookingid   ?? throw new InvalidOperationException("Failed to create booking");
         }
 
         [TearDown]
         public void TearDown()
         {
             _apiClient?.Dispose();
-        }
+         }
 
         /// <summary>
         /// Test 1: Authenticate with valid credentials
@@ -102,18 +102,18 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
         public async Task UpdateBooking_WithPut_FullReplace()
         {
             // Arrange - Must provide ALL fields for PUT
-            var updatedBooking = new Booking
+            var updatedBooking = new BookingRestful
             {
-                firstname = "Updated",
-                lastname = "Name",
-                totalprice = 200,
-                depositpaid = false,
-                bookingdates = new BookingDates
+                Firstname = "Updated",
+                Lastname = "Name",
+                Totalprice = 200,
+                Depositpaid = false,
+                Bookingdates = new BookingDates
                 {
-                    checkin = "2024-03-01",
-                    checkout = "2024-03-10"
+                    Checkin = "2024-03-01",
+                    Checkout = "2024-03-10"
                 },
-                additionalneeds = "Dinner"
+                Additionalneeds = "Dinner"
             };
 
             // Act
@@ -121,9 +121,9 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
 
             // Assert
             response.Should().NotBeNull();
-            response!.firstname.Should().Be("Updated", "firstname should be updated");
-            response.lastname.Should().Be("Name", "lastname should be updated");
-            response.totalprice.Should().Be(200, "totalprice should be updated");
+            response!.Firstname.Should().Be("Updated", "firstname should be updated");
+            response.Lastname.Should().Be("Name", "lastname should be updated");
+            response.Totalprice.Should().Be(200, "totalprice should be updated");
         }
 
         /// <summary>
@@ -139,17 +139,27 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
             // Arrange - Only update firstname
             var partialUpdate = new PartialUpdate
             {
-                firstname = "Patched"
+                Firstname = "Patched",
+                Lastname = "User",          // ← передаємо старе значення
+                Totalprice = 100,           // ← передаємо старе значення
+                Depositpaid = true,         // ← передаємо старе значення
+                Bookingdates = new BookingDates
+                {
+                    Checkin = "2024-01-01",
+                    Checkout = "2024-01-10"
+                },
+                Additionalneeds = null      // або старе значення, якщо було
             };
+
 
             // Act
             var response = await _apiClient.PartialUpdateBookingAsync(_bookingId, partialUpdate, _token);
 
             // Assert
             response.Should().NotBeNull();
-            response!.firstname.Should().Be("Patched", "firstname should be updated");
-            response.lastname.Should().Be("User", "lastname should remain unchanged");
-            response.totalprice.Should().Be(100, "totalprice should remain unchanged");
+            response!.Firstname.Should().Be("Patched", "firstname should be updated");
+            response.Lastname.Should().Be("User", "lastname should remain unchanged");
+            response.Totalprice.Should().Be(100, "totalprice should remain unchanged");
         }
 
         /// <summary>
@@ -163,12 +173,12 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
         public async Task UpdateBooking_WithoutToken_ReturnsForbidden()
         {
             // Arrange
-            var updatedBooking = new Booking
+            var updatedBooking = new BookingRestful
             {
-                firstname = "Hacker",
-                lastname = "Attempt",
-                totalprice = 999,
-                depositpaid = true
+                Firstname = "Hacker",
+                Lastname = "Attempt",
+                Totalprice = 999,
+                Depositpaid = true
             };
 
             // Act - Try without token (pass empty string)
@@ -189,10 +199,10 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
         public async Task UpdateBooking_NonExistentBooking_ReturnsNotFound()
         {
             // Arrange
-            var updatedBooking = new Booking
+            var updatedBooking = new BookingRestful
             {
-                firstname = "Ghost",
-                lastname = "Booking"
+                Firstname = "Ghost",
+                Lastname = "Booking"
             };
 
             // Act

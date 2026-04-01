@@ -1,21 +1,31 @@
-﻿using NUnit.Framework;
-
-using RestSharp;
-
-using PetInsurance.Tests.Core;
-using PetInsurance.Tests.Models;
+﻿using System.Text.Json;
 
 using FluentAssertions;
 
-using System.Text.Json;
+using NUnit.Framework;
+
+using PetInsurance.Tests.ApiClients;
+using PetInsurance.Tests.Config;
+using PetInsurance.Tests.Core;
+using PetInsurance.Tests.Models;
+
+using RestSharp;
 
 namespace PetInsurance.Tests.Tests.API
 {
     [TestFixture]
-    public class PetApiTests : BaseApiTest
+    public class PetApiClientTests : BaseApiTest
     {
+        private IPetApiClient _apiClient;
+
+        [SetUp]
+        public void SetUp()
+        {
+            _apiClient = new RealPetApiClient(TestConfiguration.Instance.PetStoreUrl);
+        }
+
         [Test]
-        public async Task GetPetById_Success()
+        public async Task GetAnyPetById_Success()
         {
             // 🔍 Крок 1: Знайти будь-якого доступного пета
             var searchRequest = new RestRequest("/pet/findByStatus?status=available", Method.Get);
@@ -42,6 +52,27 @@ namespace PetInsurance.Tests.Tests.API
             var pet = JsonSerializer.Deserialize<Pet>(response.Content!,
                 new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
+            pet.Should().NotBeNull();
+            pet!.Id.Should().Be(petId);
+        }
+
+        [Test]
+        public async Task GetAnyPetById_SuccessTest()
+        {
+            // Act 1: Отримуємо список через виправлений метод
+            var pets = await _apiClient.GetPetByStatusAsync("available");
+
+            if (pets == null || !pets.Any())
+            {
+                Assert.Inconclusive("No available pets found");
+            }
+
+            var petId = pets.First().Id;
+
+            // Act 2: Отримуємо пета по ID
+            var pet = await _apiClient.GetPetByIdAsync(petId);
+
+            // Assert
             pet.Should().NotBeNull();
             pet!.Id.Should().Be(petId);
         }

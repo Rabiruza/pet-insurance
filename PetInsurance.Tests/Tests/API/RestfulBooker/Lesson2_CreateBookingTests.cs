@@ -45,18 +45,18 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
         public async Task CreateBooking_WithValidData_ReturnsCreatedBooking()
         {
             // Arrange - 准备 test data
-            var newBooking = new Booking
+            var newBooking = new BookingRestful
             {
-                firstname = "John",
-                lastname = "Doe",
-                totalprice = 100,
-                depositpaid = true,
-                bookingdates = new BookingDates
+                Firstname = "John",
+                Lastname = "Doe",
+                Totalprice = 100,
+                Depositpaid = true,
+                Bookingdates = new BookingDates
                 {
-                    checkin = "2024-01-01",
-                    checkout = "2024-01-10"
+                    Checkin = "2024-01-01",
+                    Checkout = "2024-01-10"
                 },
-                additionalneeds = "Breakfast"
+                Additionalneeds = "Breakfast"
             };
 
             // Act - 执行 POST request
@@ -64,13 +64,13 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
 
             // Assert - 验证 response
             Assert.That(response, Is.Not.Null, "Response should not be null");
-            Assert.That(response!.bookingid, Is.GreaterThan(0), "Booking ID should be positive");
-            Assert.That(response.booking, Is.Not.Null, "Booking data should be returned");
+            Assert.That(response!.Bookingid, Is.GreaterThan(0), "Booking ID should be positive");
+            Assert.That(response.Booking, Is.Not.Null, "Booking data should be returned");
             
             // Verify the returned data matches what we sent
-            Assert.That(response.booking!.firstname, Is.EqualTo("John"), "Firstname should match");
-            Assert.That(response.booking.lastname, Is.EqualTo("Doe"), "Lastname should match");
-            Assert.That(response.booking.totalprice, Is.EqualTo(100), "Total price should match");
+            Assert.That(response.Booking!.Firstname, Is.EqualTo("John"), "Firstname should match");
+            Assert.That(response.Booking.Lastname, Is.EqualTo("Doe"), "Lastname should match");
+            Assert.That(response.Booking.Totalprice, Is.EqualTo(100), "Total price should match");
         }
 
         /// <summary>
@@ -83,18 +83,18 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
         public async Task CreateBooking_ValidateResponse_WithFluentAssertions()
         {
             // Arrange
-            var newBooking = new Booking
+            var newBooking = new BookingRestful
             {
-                firstname = "Jane",
-                lastname = "Smith",
-                totalprice = 150,
-                depositpaid = false,
-                bookingdates = new BookingDates
+                Firstname = "Jane",
+                Lastname = "Smith",
+                Totalprice = 150,
+                Depositpaid = false,
+                Bookingdates = new BookingDates
                 {
-                    checkin = "2024-02-01",
-                    checkout = "2024-02-15"
+                    Checkin = "2024-02-01",
+                    Checkout = "2024-02-15"
                 },
-                additionalneeds = "Lunch"
+                Additionalneeds = "Lunch"
             };
 
             // Act
@@ -102,10 +102,10 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
 
             // Assert - FluentAssertions style
             response.Should().NotBeNull("creation should return a response");
-            response!.bookingid.Should().BeGreaterThan(0, "booking ID should be positive");
-            response.booking.Should().NotBeNull("booking data should be returned");
+            response!.Bookingid.Should().BeGreaterThan(0, "booking ID should be positive");
+            response.Booking.Should().NotBeNull("booking data should be returned");
             
-            response.booking!.Should().BeEquivalentTo(newBooking, 
+            response.Booking!.Should().BeEquivalentTo(newBooking, 
                 options => options.ExcludingMissingMembers(),
                 "returned booking should match the request");
         }
@@ -120,10 +120,17 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
         public async Task CreateBooking_WithMinimalData_Success()
         {
             // Arrange - Only required fields
-            var minimalBooking = new Booking
+            var minimalBooking = new BookingRestful
             {
-                firstname = "Minimal",
-                lastname = "Test"
+                Firstname = "Minimal",
+                Lastname = "Test",
+                Totalprice = 100,
+                Depositpaid = true,
+                Bookingdates = new BookingDates
+                {
+                    Checkin = "2026-04-01",
+                    Checkout = "2026-04-02"
+                }
             };
 
             // Act
@@ -131,9 +138,9 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
 
             // Assert
             response.Should().NotBeNull();
-            response!.bookingid.Should().BeGreaterThan(0);
-            response.booking!.firstname.Should().Be("Minimal");
-            response.booking.lastname.Should().Be("Test");
+            response!.Bookingid.Should().BeGreaterThan(0);
+            response.Booking!.Firstname.Should().Be("Minimal");
+            response.Booking.Lastname.Should().Be("Test");
         }
 
         /// <summary>
@@ -146,13 +153,18 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
         public async Task CreateBooking_WithSpecialCharacters_Success()
         {
             // Arrange
-            var bookingWithSpecialChars = new Booking
+            var bookingWithSpecialChars = new BookingRestful
             {
-                firstname = "José",
-                lastname = "García",
-                totalprice = 200,
-                depositpaid = true,
-                additionalneeds = "Vegetarian meal 🥗"
+                Firstname = "José",
+                Lastname = "García",
+                Totalprice = 200,
+                Depositpaid = true,
+                Bookingdates = new BookingDates
+                {
+                    Checkin = "2026-04-01",
+                    Checkout = "2026-04-05"
+                },
+                Additionalneeds = "Vegetarian meal 🥗"
             };
 
             // Act
@@ -160,8 +172,8 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
 
             // Assert
             response.Should().NotBeNull();
-            response!.booking!.firstname.Should().Be("José", "Unicode characters should be preserved");
-            response.booking.additionalneeds.Should().Contain("🥗", "Emoji should be preserved");
+            response!.Booking!.Firstname.Should().Be("José", "Unicode characters should be preserved");
+            response.Booking.Additionalneeds.Should().Contain("🥗", "Emoji should be preserved");
         }
     }
 }

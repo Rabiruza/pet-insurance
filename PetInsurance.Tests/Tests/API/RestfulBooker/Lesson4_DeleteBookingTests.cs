@@ -49,29 +49,29 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
         public async Task CrudWorkflow_CreateReadUpdateDelete_Success()
         {
             // CREATE - 创建
-            var newBooking = new Booking
+            var newBooking = new BookingRestful
             {
-                firstname = "CRUD",
-                lastname = "Test",
-                totalprice = 50,
-                depositpaid = true
+                Firstname = "CRUD",
+                Lastname = "Test",
+                Totalprice = 50,
+                Depositpaid = true
             };
             var createResponse = await _apiClient.CreateBookingAsync(newBooking);
             createResponse.Should().NotBeNull("create should succeed");
-            int bookingId = createResponse!.bookingid;
+            int bookingId = createResponse!.Bookingid;
 
             try
             {
                 // READ - 读取
                 var getBooking = await _apiClient.GetBookingByIdAsync(bookingId);
                 getBooking.Should().NotBeNull("booking should exist after creation");
-                getBooking!.firstname.Should().Be("CRUD");
+                getBooking!.Firstname.Should().Be("CRUD");
 
                 // UPDATE - 更新
-                var update = new PartialUpdate { totalprice = 75 };
+                var update = new PartialUpdate { Totalprice = 75 };
                 var updatedBooking = await _apiClient.PartialUpdateBookingAsync(bookingId, update, _token);
                 updatedBooking.Should().NotBeNull();
-                updatedBooking!.totalprice.Should().Be(75, "price should be updated");
+                updatedBooking!.Totalprice.Should().Be(75, "price should be updated");
 
                 // DELETE - 删除
                 var deleteResult = await _apiClient.DeleteBookingAsync(bookingId, _token);
@@ -105,9 +105,9 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
         public async Task DeleteBooking_ExistingBooking_ReturnsNoContent()
         {
             // Arrange - Create booking first
-            var booking = new Booking { firstname = "ToDelete", lastname = "User" };
+            var booking = new BookingRestful { Firstname = "ToDelete", Lastname = "User" };
             var createResponse = await _apiClient.CreateBookingAsync(booking);
-            int bookingId = createResponse!.bookingid;
+            int bookingId = createResponse!.Bookingid;
 
             try
             {
@@ -155,9 +155,9 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
         public async Task DeleteBooking_WithoutToken_ReturnsForbidden()
         {
             // Arrange - Create booking
-            var booking = new Booking { firstname = "NoAuth", lastname = "Test" };
+            var booking = new BookingRestful { Firstname = "NoAuth", Lastname = "Test" };
             var createResponse = await _apiClient.CreateBookingAsync(booking);
-            int bookingId = createResponse!.bookingid;
+            int bookingId = createResponse!.Bookingid;
 
             try
             {
@@ -184,9 +184,9 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
         public async Task DeleteBooking_Twice_IdempotentBehavior()
         {
             // Arrange - Create booking
-            var booking = new Booking { firstname = "Idempotent", lastname = "Test" };
+            var booking = new BookingRestful { Firstname = "Idempotent", Lastname = "Test" };
             var createResponse = await _apiClient.CreateBookingAsync(booking);
-            int bookingId = createResponse!.bookingid;
+            int bookingId = createResponse!.Bookingid;
 
             // First delete - should succeed
             var firstDelete = await _apiClient.DeleteBookingAsync(bookingId, _token);

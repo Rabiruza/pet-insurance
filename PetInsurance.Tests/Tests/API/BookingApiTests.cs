@@ -6,6 +6,7 @@ using PetInsurance.Tests.Models;
 using FluentAssertions;
 
 using System.Text.Json;
+using System.Net;
 
 namespace PetInsurance.Tests.Tests.API
 {
@@ -114,6 +115,73 @@ namespace PetInsurance.Tests.Tests.API
 
             var createResponse = await _client.ExecuteAsync<Booking>(createRequest);
             createResponse.Data.Should().BeSameAs(randomBooking);
+        }
+
+        [Test]
+        public async Task CreateClaim_Returns201Created()
+        {
+            // Arrange
+            var claimData = new
+            {
+                petName = "Buddy",
+                ownerName = "Anna",
+                amount = 250.50
+            };
+            
+            var request = new RestRequest("/api/claims", Method.Post);
+            request.AddJsonBody(claimData);
+            var tokenRequest = new RestRequest("/auth", Method.Post);
+            tokenRequest.AddJsonBody(new
+            {
+                username = "admin",
+                password = "password123"
+            });
+            var tokenResponse = await _client.ExecuteAsync(tokenRequest);
+            var token = JsonSerializer.Deserialize<TokenResponse>(tokenResponse.Content!)?.Token;
+            request.AddHeader("Authorization", "Bearer " + token);
+
+            // Act
+            var response = await _client.ExecuteAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.Created); // 201
+            response.ContentType.Should().Contain("application/json");
+            
+            var createdClaim = JsonSerializer.Deserialize<Claim>(response.Content!);
+            createdClaim!.Id.Should().BeGreaterThan(0);
+            createdClaim.Status.Should().Be("pending");
+            
+            // Перевіряємо, що Location header вказує на новий ресурс
+            response.Headers!.Should().Contain(h => h.Name == "Location");
+        }
+
+        [Test]
+        public async Task GetClaim_NotFound_Returns404()
+        {
+            // Arrange
+            var request = new RestRequest("/api/claims/99999"); // Не існуючий ID
+
+            // Act
+            var response = await _client.ExecuteAsync(request);
+    
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.NotFound); // 404
+        }
+
+        [Test]
+        public async Task CreateClaim_InvalidData_Returns400()
+        {
+            // Arrange
+            var invalidData = new { petName = "" }; // Порожнє ім'я - не валідно
+            
+            var request = new RestRequest("/api/claims", Method.Post);
+            request.AddJsonBody(invalidData);
+
+            // Act
+            var response = await _client.ExecuteAsync(request);
+
+            // Assert
+            response.StatusCode.Should().Be(HttpStatusCode.BadRequest); // 400
         }
     }
 }

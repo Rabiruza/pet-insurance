@@ -71,8 +71,8 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
 
             // Assert - 验证
             Assert.That(booking, Is.Not.Null, "Booking should exist");
-            Assert.That(booking!.firstname, Is.Not.Null.And.Not.Empty, "Firstname should not be empty");
-            Assert.That(booking.lastname, Is.Not.Null.And.Not.Empty, "Lastname should not be empty");
+            Assert.That(booking!.Firstname, Is.Not.Null.And.Not.Empty, "Firstname should not be empty");
+            Assert.That(booking.Lastname, Is.Not.Null.And.Not.Empty, "Lastname should not be empty");
         }
 
         /// <summary>
@@ -133,9 +133,9 @@ namespace PetInsurance.Tests.Tests.API.RestfulBooker
 
             // Assert - FluentAssertions style (more readable)
             booking.Should().NotBeNull("booking with ID {0} should exist", bookingId);
-            booking!.Should().Match<Booking>(b => 
-                b.firstname != null && 
-                b.lastname != null, 
+            booking!.Should().Match<BookingRestful>(b => 
+                b.Firstname != null && 
+                b.Lastname != null, 
                 "booking should have firstname and lastname");
         }
     }

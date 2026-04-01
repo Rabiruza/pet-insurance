@@ -15,11 +15,11 @@ namespace PetInsurance.Tests.ApiClients.RestfulBooker
         Task<Token?> CreateTokenAsync(string username, string password);
 
         // Bookings - CRUD Operations
-        Task<List<Booking>?> GetAllBookingsAsync();
-        Task<Booking?> GetBookingByIdAsync(int bookingId);
-        Task<BookingResponse?> CreateBookingAsync(Booking booking);
-        Task<Booking?> UpdateBookingAsync(int bookingId, Booking booking, string token);
-        Task<Booking?> PartialUpdateBookingAsync(int bookingId, PartialUpdate update, string token);
+        Task<List<BookingSummary>?> GetAllBookingsAsync();
+        Task<BookingRestful?> GetBookingByIdAsync(int bookingId);
+        Task<BookingResponse?> CreateBookingAsync(BookingRestful booking);
+        Task<BookingRestful?> UpdateBookingAsync(int bookingId, BookingRestful booking, string token);
+        Task<BookingRestful?> PartialUpdateBookingAsync(int bookingId, PartialUpdate update, string token);
         Task<bool> DeleteBookingAsync(int bookingId, string token);
     }
 }

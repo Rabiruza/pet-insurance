@@ -1,0 +1,16 @@
+$kind: http-request
+name: https://petstore.swagger.io/v2/pet
+url: https://petstore.swagger.io/v2/pets
+method: POST
+body:
+  type: json
+  content: "{\r
+
+    \  \"id\": 0,\r
+
+    \  \"name\": \"doggie\",\r
+
+    \  \"status\": \"available\"\r
+
+    }"
+order: 1774963140329
