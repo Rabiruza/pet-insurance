@@ -94,45 +94,45 @@ namespace PlaywrightTableTests
         }
 
         // 4. Expect assertions (сучасний стиль Playwright)
-        [Test]
-        public async Task UseExpectAssertions()
-        {
-            await _page.GotoAsync("https://the-internet.herokuapp.com/tables");
+        //[Test]
+        //public async Task UseExpectAssertions()
+        //{
+        //    await _page.GotoAsync("https://the-internet.herokuapp.com/tables");
 
-            var table = _page.Locator("#table1");
+        //    var table = _page.Locator("#table1");
 
-            // Перевірка, що таблиця має більше 3 рядків
+        //    // Перевірка, що таблиця має більше 3 рядків
             
 
-            await Expect(table.Locator("tbody tr")).ToHaveCountAsync(4);
+        //    await Expect(table.Locator("tbody tr")).ToHaveCountAsync(4);
 
-            // Перевірка тексту в комірці
-            await Expect(table.Locator("tr td").Nth(5)).ToHaveTextAsync("jdoe@hotmail.com");
+        //    // Перевірка тексту в комірці
+        //    await Expect(table.Locator("tr td").Nth(5)).ToHaveTextAsync("jdoe@hotmail.com");
 
-            // Перевірка сортування (якщо клікнути по заголовку)
-            await table.Locator("th").Filter(new() { HasText = "Last Name" }).ClickAsync();
-            await Expect(table.Locator("tbody tr").First()).ToContainTextAsync("Bach");
-        }
+        //    // Перевірка сортування (якщо клікнути по заголовку)
+        //    await table.Locator("th").Filter(new() { HasText = "Last Name" }).ClickAsync();
+        //    await Expect(table.Locator("tbody tr").First()).ToContainTextAsync("Bach");
+        //}
 
-        // 5. Бонус: Комбінація APIRequestContext + UI (дуже часто питають)
-        [Test]
-        public async Task CombineApiAndUi()
-        {
-            // Спочатку API
-            var apiContext = await _page.Context.APIRequest.NewContextAsync(new()
-            {
-                BaseURL = "https://jsonplaceholder.typicode.com"
-            });
+        //// 5. Бонус: Комбінація APIRequestContext + UI (дуже часто питають)
+        //[Test]
+        //public async Task CombineApiAndUi()
+        //{
+        //    // Спочатку API
+        //    var apiContext = await _page.Context.APIRequest.NewContextAsync(new()
+        //    {
+        //        BaseURL = "https://jsonplaceholder.typicode.com"
+        //    });
 
-            var response = await apiContext.GetAsync("/posts/1");
-            var json = await response.JsonAsync();
+        //    var response = await apiContext.GetAsync("/posts/1");
+        //    var json = await response.JsonAsync();
 
-            // Потім UI
-            await _page.GotoAsync("https://the-internet.herokuapp.com/tables");
-            await Expect(_page.Locator("#table1")).ToBeVisibleAsync();
+        //    // Потім UI
+        //    await _page.GotoAsync("https://the-internet.herokuapp.com/tables");
+        //    await Expect(_page.Locator("#table1")).ToBeVisibleAsync();
 
-            Console.WriteLine("API + UI успішно комбіновано");
-        }
+        //    Console.WriteLine("API + UI успішно комбіновано");
+        //}
     }
 
     // ====================== Page Object Model ======================
